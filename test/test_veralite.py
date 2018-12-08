@@ -51,6 +51,43 @@ class TestVeralite(unittest.TestCase):
         self.assertEqual(_NUM_MOTION_SENSORS, len(motion_sensors))
 
     @patch('veralite.veralite.utils')
+    def test_mode_home(self, mock_utils):
+        mock_utils.perform_get_request.return_value = self.json_data['Mode'] = '1'
+        self.veralite.update_devices()
+        self.assertEqual(self.veralite.home_mode, veralite.MODE_HOME)
+
+    @patch('veralite.veralite.utils')
+    def test_mode_away(self, mock_utils):
+        mock_utils.perform_get_request.return_value = self.json_data['Mode'] = '2'
+        self.veralite.update_devices()
+        self.assertEqual(self.veralite.home_mode, veralite.MODE_AWAY)
+
+    @patch('veralite.veralite.utils')
+    def test_mode_night(self, mock_utils):
+        mock_utils.perform_get_request.return_value = self.json_data['Mode'] = '3'
+        self.veralite.update_devices()
+        self.assertEqual(self.veralite.home_mode, veralite.MODE_NIGHT)
+
+    @patch('veralite.veralite.utils')
+    def test_mode_vacation(self, mock_utils):
+        mock_utils.perform_get_request.return_value = self.json_data['Mode'] = '4'
+        self.veralite.update_devices()
+        self.assertEqual(self.veralite.home_mode, veralite.MODE_VACATION)
+
+    @patch('veralite.veralite.utils')
+    def test_invalid_mode(self, mock_utils):
+        mock_utils.perform_get_request.return_value = self.json_data['Mode'] = '5'
+        self.veralite.update_devices()
+        self.assertEqual(self.veralite.home_mode, None)
+
+    @patch('veralite.veralite.utils')
+    def test_home_mode_not_set(self, mock_utils):
+        self.assertNotIn('Mode', self.json_data)
+        mock_utils.perform_get_request.return_value = self.json_data
+        self.veralite.update_devices()
+        self.assertEqual(self.veralite.home_mode, None)
+
+    @patch('veralite.veralite.utils')
     def test_turn_on_dimming_light(self, mock_utils):
         self.veralite.update_devices()
         data = json.loads(_RESPONSE_STRING)

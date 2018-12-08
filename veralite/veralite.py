@@ -19,12 +19,18 @@ _DATA_ENDPOINT = '/port_3480/data_request?id=user_data'
 # create logger
 logger = logging.getLogger('veralite')
 
+# valid home modes
+MODE_HOME = 'HOME'
+MODE_AWAY = 'AWAY'
+MODE_NIGHT = 'NIGHT'
+MODE_VACATION = 'VACATION'
 
 class Veralite(object):
     def __init__(self, ip, user=None, password=None):
         self.ip = ip
         self.user = user
         self.password = password
+        self.home_mode = None
         self.rooms = {}
         self.dimming_lights = {}
         self.scenes = {}
@@ -60,6 +66,9 @@ class Veralite(object):
         rooms = response_content['rooms']
         available_scenes = response_content['scenes']
 
+        if 'Mode' in response_content:
+           self._assign_home_mode(response_content['Mode'])
+
         # handle processing rooms
         for room in rooms:
             if room["id"] not in self.rooms:
@@ -94,6 +103,13 @@ class Veralite(object):
                         and "Sensor" not in device["device_type"]:
 
                     self._load_switch(device, room_name)
+
+    def _assign_home_mode(self, home_mode_id):
+        try:
+           self.home_mode = {1: MODE_HOME, 2: MODE_AWAY, 3: MODE_NIGHT, 4: MODE_VACATION}[int(home_mode_id)]
+        except KeyError:
+           self.home_mode = None
+           logger.error('Invalid Home Mode ID {0}'.format(home_mode_id))
 
     def _load_dimming_light(self, device, room_name):
         """
