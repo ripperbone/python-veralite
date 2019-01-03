@@ -109,7 +109,6 @@ class Veralite(object):
            self.home_mode = {1: MODE_HOME, 2: MODE_AWAY, 3: MODE_NIGHT, 4: MODE_VACATION}[int(home_mode_id)]
         except KeyError:
            self.home_mode = None
-           logger.error('Invalid Home Mode ID {0}'.format(home_mode_id))
 
     def _load_dimming_light(self, device, room_name):
         """
