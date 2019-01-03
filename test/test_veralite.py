@@ -54,25 +54,25 @@ class TestVeralite(unittest.TestCase):
     def test_mode_home(self, mock_utils):
         mock_utils.perform_get_request.return_value = self.json_data['Mode'] = '1'
         self.veralite.update_devices()
-        self.assertEqual(self.veralite.home_mode, veralite.MODE_HOME)
+        self.assertEqual(self.veralite.home_mode, 'HOME')
 
     @patch('veralite.veralite.utils')
     def test_mode_away(self, mock_utils):
         mock_utils.perform_get_request.return_value = self.json_data['Mode'] = '2'
         self.veralite.update_devices()
-        self.assertEqual(self.veralite.home_mode, veralite.MODE_AWAY)
+        self.assertEqual(self.veralite.home_mode, 'AWAY')
 
     @patch('veralite.veralite.utils')
     def test_mode_night(self, mock_utils):
         mock_utils.perform_get_request.return_value = self.json_data['Mode'] = '3'
         self.veralite.update_devices()
-        self.assertEqual(self.veralite.home_mode, veralite.MODE_NIGHT)
+        self.assertEqual(self.veralite.home_mode, 'NIGHT')
 
     @patch('veralite.veralite.utils')
     def test_mode_vacation(self, mock_utils):
         mock_utils.perform_get_request.return_value = self.json_data['Mode'] = '4'
         self.veralite.update_devices()
-        self.assertEqual(self.veralite.home_mode, veralite.MODE_VACATION)
+        self.assertEqual(self.veralite.home_mode, 'VACATION')
 
     @patch('veralite.veralite.utils')
     def test_invalid_mode(self, mock_utils):
