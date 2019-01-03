@@ -107,6 +107,17 @@ def parse_args():
     switch_change_group.add_argument('--on', action='store_true', default=False,
                                      help='to turn on switch')
 
+    # scene parser setup
+    scene_parser = subparsers.add_parser('scene', help='scene commands')
+    scene_subparser = scene_parser.add_subparsers(dest='sub_command', help='sub command help')
+
+    # list scenes
+    scene_subparser.add_parser('list', help='show vera scenes')
+
+    # run scenes
+    run_scene_parser = scene_subparser.add_parser('run', help='run a specified scene')
+    run_scene_parser.add_argument('-id', '--identifier', dest='identifier', help='scene identifier', required=True)
+
     return parser.parse_args()
 
 
@@ -127,6 +138,8 @@ def main():
         elif args.command == "switch":
             # handle switch sensor command
             handle_switch_command(args, vapi)
+        elif args.command == "scene":
+            handle_scene_command(args, vapi)
 
 
 def handle_light_command(args, vapi):
@@ -245,6 +258,28 @@ def handle_motion_sensor_command(args, vapi):
                     print("\t\tResponse: BAD, Reason[" + response.message + "]")
         else:
             print("\tNo Motion Sensor Device found with id[" + str(motion_sensor_identifier) + "]")
+
+
+def handle_scene_command(args, vapi):
+    """
+    Method to handle scene commands
+    :param args: command line args
+    :param vapi: veralite object
+    """
+    scenes = vapi.scenes
+
+    if "sub_command" not in args or args.sub_command is None or args.sub_command == "list":
+        list_devices("Scenes", scenes)
+    elif args.sub_command == "run":
+        scene_identifier = int(args.identifier)
+        if scene_identifier in scenes:
+            response = vapi.run_scene(scenes[scene_identifier])
+            if response['result']:
+                print("\t\tResponse: OK")
+            else:
+                print("\t\tResponse: BAD, Reason[" + response.message + "]")
+        else:
+            print("\tNo scenes found with id[" + str(scene_identifier) + "]")
 
 
 def list_devices(header, devices):

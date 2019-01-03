@@ -53,16 +53,17 @@ Command line
 .. code-block:: bash
 
     usage: veralite [-h] [--conf FILE] --ip IP -u USER -p PASSWORD
-                       {light,motion,switch} ...
+                       {light,motion,switch,scene} ...
 
     Command line interface to Veralite™ Smart Home Controller
 
     positional arguments:
-      {light,motion,switch}
+      {light,motion,switch,scene}
                         command help
         light               light commands
         motion              motion sensor commands
         switch              switch commands
+        scene               scene commands
 
     optional arguments:
       -h, --help            show this help message and exit
@@ -77,6 +78,7 @@ Command line
         veralite --ip 192.168.1.22 -u veraadmin -p adminpassword switch modify --id 22 --on
         veralite --ip 192.168.1.22 -u veraadmin -p adminpassword light list
         veralite --ip 192.168.1.22 -u veraadmin -p adminpassword motion modify --id 10 --arm
+        veralite --ip 192.168.1.22 -u veraadmin -p adminpassword scene run --id 16
 
 
 A configuration file can also be specified to prevent ip/user/password repitition.
