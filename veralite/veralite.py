@@ -262,3 +262,16 @@ class Veralite(object):
          return response
         except Exception as e:
          return {'result': False, 'message': str(e)}
+
+    def set_home_mode(self, mode):
+        """
+        Changes the current home mode
+        :param mode: an integer 1..4
+        :return: returns `dict`
+        """
+        try:
+            response = utils.update_home_mode(self.ip, self.user, self.password, mode)
+            return response
+        except Exception as e:
+            return {'result': False, 'message': str(e)}
+

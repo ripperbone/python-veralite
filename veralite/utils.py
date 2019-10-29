@@ -47,6 +47,9 @@ SENSOR_SERVICE = "urn:micasaverde-com:serviceId:SecuritySensor1"
 SCENE_ENDPOINT = "/port_3480/data_request?id=lu_action&output_format=json&action=RunScene"
 SCENE_SERVICE = "urn:micasaverde-com:serviceId:HomeAutomationGateway1"
 
+HOME_MODE_ENDPOINT = "/port_3480/data_request?id=lu_action&output_format=json&action=SetHouseMode"
+HOME_MODE_SERVICE = "urn:micasaverde-com:serviceId:HomeAutomationGateway1"
+
 
 def perform_get_request(vera_ip, user, password, url_endpoint, params, timeout=_DEFUALT_TIMEOUT):
     """
@@ -140,6 +143,16 @@ def update_scene(vera_ip, user, password, scene, new_state):
     params = {'serviceId': SCENE_SERVICE, 'SceneNum': scene.identifier}
 
     response_content = perform_get_request(vera_ip, user, password, SCENE_ENDPOINT, params)
+    if "ERROR" not in response_content:
+        return {'result': True, 'message': response_content}
+    else:
+        return {'result': False, 'message': response_content}
+
+def update_home_mode(vera_ip, user, password, new_mode):
+
+    params = {'serviceId': HOME_MODE_SERVICE, 'Mode': new_mode}
+
+    response_content = perform_get_request(vera_ip, user, password, HOME_MODE_ENDPOINT, params)
     if "ERROR" not in response_content:
         return {'result': True, 'message': response_content}
     else:

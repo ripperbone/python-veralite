@@ -58,12 +58,13 @@ Command line
     Command line interface to Veralite™ Smart Home Controller
 
     positional arguments:
-      {light,motion,switch,scene}
+      {light,motion,switch,scene,mode}
                         command help
         light               light commands
         motion              motion sensor commands
         switch              switch commands
         scene               scene commands
+        mode                home mode commands
 
     optional arguments:
       -h, --help            show this help message and exit

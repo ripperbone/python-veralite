@@ -118,6 +118,18 @@ def parse_args():
     run_scene_parser = scene_subparser.add_parser('run', help='run a specified scene')
     run_scene_parser.add_argument('-id', '--identifier', dest='identifier', help='scene identifier', required=True)
 
+
+    # home mode parser setup
+    home_mode_parser = subparsers.add_parser('mode', help='home mode commands')
+    home_mode_subparser = home_mode_parser.add_subparsers(dest='sub_command', help='sub command help')
+
+    # show current mode
+    home_mode_subparser.add_parser('show', help='show current home mode')
+
+    # set home mode
+    set_home_mode_parser = home_mode_subparser.add_parser('set', help='set the home mode')
+    set_home_mode_parser.add_argument('-id', '--identifier', dest='identifier', help='home mode identifier', required=True)
+
     return parser.parse_args()
 
 
@@ -140,6 +152,8 @@ def main():
             handle_switch_command(args, vapi)
         elif args.command == "scene":
             handle_scene_command(args, vapi)
+        elif args.command == "mode":
+            handle_home_mode_command(args, vapi)
 
 
 def handle_light_command(args, vapi):
@@ -280,6 +294,23 @@ def handle_scene_command(args, vapi):
                 print("\t\tResponse: BAD, Reason[" + response.message + "]")
         else:
             print("\tNo scenes found with id[" + str(scene_identifier) + "]")
+
+
+def handle_home_mode_command(args, vapi):
+    """
+    Method to handle home mode commands
+    :param args: command line args
+    :param vapi: veralite object
+    """
+    if "sub_command" not in args or args.sub_command is None or args.sub_command == "show":
+        print("\t\tHome Mode: [" + vapi.home_mode +"]")
+
+    elif args.sub_command == "set":
+        response = vapi.set_home_mode(int(args.identifier))
+        if response['result']:
+            print("\t\tResponse: OK")
+        else:
+            print("\t\tResponse: BAD, Reason[" + response.message + "]")
 
 
 def list_devices(header, devices):
